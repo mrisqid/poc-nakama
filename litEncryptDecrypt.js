@@ -14,11 +14,6 @@ require('dotenv').config();
 const PRIVATE_KEY = process.env.PRIVATE_KEY;
 const PROVIDER = process.env.PROVIDER_URL;
 
-const delegatedWalletB = new ethers.Wallet(
-  '0xe1090085b352120867ea7b154ceeee30654903a6c37afa1d5c5bcabc63c96676',
-  new ethers.providers.JsonRpcProvider(PROVIDER)
-);
-
 const accessControlConditions = [
   {
     contractAddress: "",
@@ -176,19 +171,15 @@ class Lit {
 const chain = 'ethereum';
 let myLit = new Lit(chain);
 
-async function encryptMessage() {
+async function encryptThenDecryptMsg(msg) {
   await myLit.connect();
-  const encryptedMsg = await myLit.encrypt('Hello World!');
+  const encryptedMsg = await myLit.encrypt(msg);
 
-  console.log(encryptedMsg);
+  console.log('Encrypted Message:', encryptedMsg);
+
+  const decryptedMsg = await myLit.decrypt(encryptedMsg.ciphertext, encryptedMsg.dataToEncryptHash)
+
+  console.log('Decrypted Message:', decryptedMsg);
 }
 
-async function decryptMessage() {
-  await myLit.connect();
-
-  const decryptedMsg = await myLit.decrypt('oNl2lzNtD2mdGyANVLlXJemx/l3/Cn9n2lVhxci0TdQTFhmryGzbO8vTCxVm7hp4mWH84beOheHULUN7hlaOvvU2XkIxKKiBHmWhQNGUmgUgBgws10M+S09aQIE5RskpAyVC9zUqqLL+KW8o8Dyj9eYC', '7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d677284addd200126d9069')
-
-  console.log(decryptedMsg);
-}
-
-decryptMessage();
+encryptThenDecryptMsg('Selamat Pagi!');
