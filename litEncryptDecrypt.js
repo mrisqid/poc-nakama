@@ -75,9 +75,6 @@ class Lit {
   }
 
   async getSessionSignatures(){
-    // Connect to the wallet
-    const ethWallet = new ethers.Wallet(PRIVATE_KEY);
-
     // Get the latest blockhash
     const latestBlockhash = await this.litNodeClient.getLatestBlockhash();
 
@@ -116,14 +113,14 @@ class Lit {
         uri: params.uri,
         expiration: params.expiration,
         resources: params.resourceAbilityRequests,
-        walletAddress: ethWallet.address,
+        walletAddress: wallet.address,
         nonce: latestBlockhash,
         litNodeClient: this.litNodeClient,
       });
 
       // Generate the authSig
       const authSig = await generateAuthSig({
-        signer: ethWallet,
+        signer: wallet,
         toSign,
       });
 
@@ -182,4 +179,4 @@ async function encryptThenDecryptMsg(msg) {
   console.log('Decrypted Message:', decryptedMsg);
 }
 
-encryptThenDecryptMsg('Selamat Pagi!');
+encryptThenDecryptMsg('Halo Dunia!');
